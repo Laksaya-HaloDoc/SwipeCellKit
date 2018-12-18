@@ -14,7 +14,7 @@ protocol Swipeable {
     
     var actionsView: SwipeActionsView? { get set }
     
-    var frame: CGRect { get }
+    var swipeableFrame: CGRect { get }
     
     var scrollView: UIScrollView? { get }
     

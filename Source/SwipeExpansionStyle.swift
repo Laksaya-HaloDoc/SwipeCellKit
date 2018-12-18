@@ -88,7 +88,7 @@ public struct SwipeExpansionStyle {
         guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
         guard abs(gesture.translation(in: gestureView).x) > minimumExpansionTranslation else { return false }
     
-        let xDelta = floor(abs(frame?.minX ?? view.frame.minX))
+        let xDelta = floor(abs(frame?.minX ?? view.swipeableFrame.minX))
         if xDelta <= actionsView.preferredWidth {
             return false
         } else if xDelta > targetOffset(for: view) {
@@ -96,7 +96,7 @@ public struct SwipeExpansionStyle {
         }
         
         // Use the frame instead of superview as Swipeable may not be full width of superview
-        let referenceFrame: CGRect = frame != nil ? view.frame : superview.bounds
+        let referenceFrame: CGRect = frame != nil ? view.swipeableFrame : superview.bounds
         for trigger in additionalTriggers {
             if trigger.isTriggered(view: view, gesture: gesture, in: superview, referenceFrame: referenceFrame) {
                 return true
@@ -126,9 +126,9 @@ extension SwipeExpansionStyle {
             let offset: CGFloat = {
                 switch self {
                 case .percentage(let value):
-                    return view.frame.width * value
+                    return view.swipeableFrame.width * value
                 case .edgeInset(let value):
-                    return view.frame.width - value
+                    return view.swipeableFrame.width - value
                 }
             }()
             
@@ -153,7 +153,7 @@ extension SwipeExpansionStyle {
                 let locationRatio = (actionsView.orientation == .left ? location : referenceFrame.width - location) / referenceFrame.width
                 return locationRatio > value
             case .overscroll(let value):
-                return abs(view.frame.minX) > actionsView.preferredWidth + value
+                return abs(view.swipeableFrame.minX) > actionsView.preferredWidth + value
             }
         }
     }
